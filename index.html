@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patricio Alfaro Domínguez</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f4f6fa;
+      --surface: #ffffff;
+      --border: #d8e0ee;
+      --text: #1a1c2e;
+      --muted: #5c6480;
+      --accent: #1e3a6e;
+      --accent-light: #e4eaf6;
+      --shadow: 0 2px 20px rgba(30,58,110,0.09);
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(247,245,242,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: center;
+      gap: 0;
+    }
+
+    nav button {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: none;
+      padding: 18px 32px;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.2s;
+    }
+
+    nav button::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%; right: 50%;
+      height: 2px;
+      background: var(--accent);
+      transition: left 0.25s, right 0.25s;
+    }
+
+    nav button:hover { color: var(--text); }
+    nav button.active { color: var(--accent); }
+    nav button.active::after { left: 20%; right: 20%; }
+    nav { background: rgba(244,246,250,0.95); }
+
+    /* ── VIEWS ── */
+    .view { display: none; padding-top: 64px; min-height: 100vh; }
+    .view.active { display: block; }
+
+    /* ── HERO LAYOUT (Home + About) ── */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 72px 24px 60px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .avatar-wrap {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-align: center;
+    }
+
+    .avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .hero .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+    }
+
+    /* ── CONTENT CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 36px 40px;
+      margin-bottom: 20px;
+      width: 100%;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--accent);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--accent-light);
+    }
+
+    .card p, .card li {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #3d3830;
+    }
+
+    .card ul { padding-left: 18px; }
+    .card li { margin-bottom: 6px; }
+
+    .tag {
+      display: inline-block;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin: 4px 4px 4px 0;
+    }
+
+    /* ── SCHEDULE ── */
+    #schedule {
+      padding: 32px 16px 60px;
+      overflow-x: auto;
+    }
+
+    #schedule h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      text-align: center;
+      margin-bottom: 32px;
+      color: var(--text);
+    }
+
+    .schedule-table {
+      width: 100%;
+      min-width: 800px;
+      border-collapse: collapse;
+      background: var(--surface);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .schedule-table th {
+      background: #1e3a6e;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 14px 10px;
+      text-align: center;
+    }
+
+    .schedule-table th:first-child {
+      background: #122754;
+      width: 70px;
+    }
+
+    .schedule-table td {
+      border: 1px solid var(--border);
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      height: 42px;
+      vertical-align: middle;
+    }
+
+    .schedule-table td.hour {
+      background: var(--accent-light);
+      color: var(--accent);
+      font-weight: 500;
+      font-size: 0.75rem;
+      white-space: nowrap;
+    }
+
+    /* Cell colors */
+    .c-blue   { background:#d0e4f7; color:#1a3a6e; font-weight:500; }
+    .c-orange { background:#ffe0b2; color:#7a3600; font-weight:500; }
+    .c-sky    { background:#cce8f4; color:#0d4f6e; font-weight:500; }
+    .c-green  { background:#c8e6c9; color:#1b5e20; font-weight:500; }
+    .c-purple { background:#e1d5f0; color:#4a148c; font-weight:500; }
+    .c-salmon { background:#ffd6cc; color:#7a2a1a; font-weight:500; }
+    .c-gray   { background:#dce3ee; color:#2c3a55; font-weight:500; }
+    .c-pink   { background:#fce4ec; color:#880e4f; font-weight:500; }
+    .c-yellow { background:#fff9c4; color:#6b5000; font-weight:500; border-left:3px solid #f9c400; }
+
+    /* Legend */
+    .legend {
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 5px 14px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+
+    /* Remove old td:first-child rule */
+
+    .schedule-table tr:hover td:not(:first-child) {
+      background: #f9f8f6;
+    }
+
+    /* ── CV VIEW ── */
+    #cv {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 24px 60px;
+    }
+
+    #cv.active {
+      display: flex;
+    }
+
+    #cv h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+
+    .cv-actions {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 12px 28px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: #1e342a; }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--accent);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover { background: var(--accent-light); }
+
+    .pdf-frame-wrap {
+      width: 100%;
+      max-width: 860px;
+      height: 80vh;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pdf-frame-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .pdf-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .pdf-placeholder svg {
+      opacity: 0.35;
+    }
+
+    /* ── FADE IN ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .view.active > * {
+      animation: fadeUp 0.4s ease both;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <button class="active" onclick="showView('home', this)">Homepage</button>
+  <button onclick="showView('about', this)">About me</button>
+  <button onclick="showView('schedule', this)">Schedule</button>
+  <button onclick="showView('cv', this)">CV</button>
+</nav>
+
+<!-- ══════════════ HOME ══════════════ -->
+<div id="home" class="view active">
+  <div class="hero">
+    <div class="avatar-wrap">
+      <img src="img.jpg" alt="Patricio Alfaro">
+    </div>
+    <h1>Patricio Alfaro Domínguez</h1>
+
+    <div class="card">
+      <h2>6G — The Next Wireless Frontier</h2>
+      <p>The sixth generation of mobile networks promises speeds exceeding 1 Tbps, sub-millisecond latency, and ubiquitous connectivity that will merge the physical and digital worlds. Some fascinating topics worth exploring:</p>
+      <ul>
+        <li>Terahertz (THz) communications and their propagation challenges</li>
+        <li>Native AI in the network: networks that learn and self-adapt</li>
+        <li>RIS (Reconfigurable Intelligent Surfaces): surfaces that shape the radio channel</li>
+        <li>Integration of non-terrestrial satellite networks (NTN) with ground infrastructure</li>
+        <li>Privacy and security in an omnipresent connectivity landscape</li>
+        <li>Energy efficiency and sustainability in ultra-dense networks</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Segment Routing v6 (SRv6) — Simplicity at Scale</h2>
+      <p>SRv6 represents a paradigm shift in how IP networks forward traffic, leveraging the vast IPv6 address space to encode forwarding instructions directly inside the packet. Key research areas include:</p>
+      <ul>
+        <li>Data plane programmability with SRv6 Network Slicing</li>
+        <li>SRv6 interoperability with MPLS in legacy networks</li>
+        <li>SRv6 as an enabler of Traffic Engineering in 5G/6G networks</li>
+        <li>SRv6 header compression (SRH compression) for WAN efficiency</li>
+        <li>SRv6 Micro-SID: overhead reduction in high-density scenarios</li>
+        <li>SRv6 applications in Multi-Domain and Multi-Operator environments</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>6G + SRv6 Convergence</h2>
+      <p>The intersection of next-generation wireless networks and new IP routing paradigms raises fundamental questions: How can SRv6 handle the extreme mobility and millions of slices that 6G will demand? What role does the programmable data plane play in the automation of cognitive networks?</p>
+      <div style="margin-top:16px;">
+        <span class="tag">Network Slicing</span>
+        <span class="tag">Open RAN</span>
+        <span class="tag">Edge Computing</span>
+        <span class="tag">Intent-Based Networking</span>
+        <span class="tag">AI/ML Networking</span>
+        <span class="tag">IPv6</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ABOUT ══════════════ -->
+<div id="about" class="view">
+  <div class="hero">
+    <div class="avatar-wrap">
+      <img src="img.jpg" alt="Patricio Alfaro">
+    </div>
+    <h1>Patricio Alfaro Domínguez</h1>
+    <p class="subtitle">About me</p>
+
+    <div class="card">
+      <h2>Who am I</h2>
+      <p>
+        <!-- Reemplaza este texto con tu descripción personal -->
+        I'm Patricio Alfaro, a computer engineering student interested mostly in all things related to DB
+        and programming. I'm 23 years old, proud owner of two cats and a big and beautiful dog, Lego builder
+        enthusiast and Football enjoyer.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>What I like</h2>
+      <p>
+        <!-- Reemplaza este texto con tus intereses -->
+       Right at this moment I'm mostly foccused on studying Japanese, as I enjoy it's music and culture.
+       I also love watching a good football match during the weekends (specially if FC Barcelona wins) 
+       and going out for a run. On this last point, I hope this year to run a half-marathon.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Hobbies</h2>
+      <ul>
+        <!-- Reemplaza esta lista con tus hobbies reales -->
+        <li>Football</li>
+        <li>Reading</li>
+        <li>Running</li>
+        <li>Music</li>
+        <li>Watching series/anime</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SCHEDULE ══════════════ -->
+<div id="schedule" class="view">
+  <div style="max-width:1200px; margin:0 auto; padding:40px 16px;">
+    <h2 style="font-family:'Playfair Display',serif; font-size:1.6rem; text-align:center; margin-bottom:32px; color:var(--text);">Weekly Schedule</h2>
+    <div style="overflow-x:auto;">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>Hour</th>
+            <th>Monday</th>
+            <th>Twesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+            <th>Sunday</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Colores: azul=distribuidos, naranja=Japanese, celeste=Social Service, verde=microcomputers Lab, rosa=Networks, lila=Mexican Resources, salmón=Network lab, amarillo=English -->
+          <tr>
+            <td class="hour">7:00–8:00</td>
+            <td class="c-blue">Advanced DB</td>
+            <td></td>
+            <td class="c-blue">Advanced DB</td>
+            <td class="c-green">microcomputers Lab</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="hour">8:00–9:00</td>
+            <td class="c-blue">Advanced DB</td>
+            <td></td>
+            <td class="c-blue">Advanced DB</td>
+            <td class="c-green">microcomputers Lab</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="hour">9:00–10:00</td>
+            <td class="c-orange">Japanese</td>
+            <td class="c-orange">Japanese</td>
+            <td class="c-orange">Japanese</td>
+            <td class="c-orange">Japanese</td>
+            <td class="c-sky">Social Service</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="hour">10:00–11:00</td>
+            <td class="c-orange">Japanese</td>
+            <td class="c-orange">Japanese</td>
+            <td class="c-orange">Japanese</td>
+            <td class="c-orange">Japanese</td>
+            <td class="c-sky">Social Service</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="hour">11:00–12:00</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-purple">Mexican Resources</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-purple">Mexican Resources</td>
+            <td class="c-sky">Social Service</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="hour">12:00–13:00</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-purple">Mexican Resources</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-purple">Mexican Resources</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-yellow">English</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="hour">13:00–14:00</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-salmon">Network lab</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-yellow">English</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="hour">14:00–15:00</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-salmon">Network lab</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-yellow">English</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="hour">15:00–16:00</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-sky">Social Service</td>
+            <td></td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-sky">Social Service</td>
+            <td class="c-yellow">English</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="hour">16:00–17:00</td>
+            <td></td>
+            <td class="c-sky">Social Service</td>
+            <td></td>
+            <td class="c-sky">Social Service</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="hour">17:00–18:00</td>
+            <td></td>
+            <td class="c-gray">Microcomputers</td>
+            <td></td>
+            <td class="c-gray">Microcomputers</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="hour">18:00–19:00</td>
+            <td></td>
+            <td class="c-gray">Microcomputers</td>
+            <td></td>
+            <td class="c-gray">Microcomputers</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="hour">19:00–20:00</td>
+            <td class="c-pink">Networks</td>
+            <td class="c-pink">Networks</td>
+            <td></td>
+            <td class="c-pink">Networks</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="hour">20:00–21:00</td>
+            <td class="c-pink">Networks</td>
+            <td class="c-pink">Networks</td>
+            <td></td>
+            <td class="c-pink">Networks</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Leyenda -->
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;justify-content:center;">
+      <span class="legend c-blue">Advanced DB</span>
+      <span class="legend c-orange">Japanese</span>
+      <span class="legend c-sky">Social Service</span>
+      <span class="legend c-green">microcomputers Lab</span>
+      <span class="legend c-purple">Mexican Resources</span>
+      <span class="legend c-salmon">Network lab</span>
+      <span class="legend c-gray">Microcomputers</span>
+      <span class="legend c-pink">Networks</span>
+      <span class="legend c-yellow">English</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ CV ══════════════ -->
+<div id="cv" class="view">
+  <h2>Currículum Vitae</h2>
+  <div class="cv-actions">
+    <!-- Reemplaza "cv.pdf" con la ruta real de tu CV -->
+    <a class="btn btn-primary" id="cv-download" href="cv.pdf" download="CV_PatricioAlfaro.pdf">
+      ⬇ Descargar CV
+    </a>
+  </div>
+  <div class="pdf-frame-wrap" id="pdf-wrap">
+    <!-- El iframe cargará el PDF. Reemplaza "cv.pdf" con tu archivo real -->
+    <iframe id="cv-iframe" src="cv.pdf" title="Currículum Vitae de Patricio Alfaro Domínguez">
+      <div class="pdf-placeholder">
+        <svg width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+        </svg>
+        <p>Tu navegador no soporta la vista del PDF.</p>
+        <a class="btn btn-secondary" href="cv.pdf" download>Descarga el CV aquí</a>
+      </div>
+    </iframe>
+  </div>
+  <p style="margin-top:16px; font-size:0.8rem; color:var(--muted);">
+    Si el PDF no carga, asegúrate de que el archivo <code>cv.pdf</code> esté en la misma carpeta que este HTML.
+  </p>
+</div>
+
+<script>
+  // ── Navigation ──
+  function showView(id, btn) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
